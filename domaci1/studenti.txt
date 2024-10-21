@@ -1,0 +1,6 @@
+IME		PREZIME		BR.BODOVA
+Ivan		Ivic		 45
+Jurica		Juric		 80
+Marija		Maric		 12
+Marko		Markic		 10
+Julija		Turis		 98
