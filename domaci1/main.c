@@ -39,7 +39,7 @@ int main(void) {
     }
 
     fclose(fp);
-    free(studenti);   //provjeri zasto za relBrBod vraca 0
+    free(studenti);
     return 0;
 }
 
