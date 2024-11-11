@@ -1,0 +1,4 @@
+﻿  zad4.c
+C:\Users\leona\Desktop\Vice\StrukturePodataka\domaci4\domaci4\zad4.c(193,9): warning C4013: 'lenghtOfList' undefined; assuming extern returning int
+C:\Users\leona\Desktop\Vice\StrukturePodataka\domaci4\domaci4\zad4.c(132,1): warning C4716: 'sortInput': must return a value
+  domaci4.vcxproj -> C:\Users\leona\Desktop\Vice\StrukturePodataka\domaci4\x64\Debug\domaci4.exe

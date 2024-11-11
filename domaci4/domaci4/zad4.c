@@ -17,7 +17,7 @@ position createElement(int, int);
 int sortInput(position, position);
 int sumOfTwoLists(position, position, position);
 int multiplicationOfTwoLists(position, position, position);
-int ReadFromFile(position);
+int ReadFromFile(position, FILE*);
 int inserAfter(position,position);
 int DeleteAfter(position);
 int Print(position);
@@ -50,6 +50,22 @@ int main(void) {
 	ReadFromFile(&head1, fp1);
 	ReadFromFile(&head2, fp2);
 
+	Print(head1.next);
+	printf("\n");
+
+	Print(head2.next);
+	printf("\n");
+	printf("\n");
+
+	sumOfTwoLists(head1.next, head2.next, &headSum);
+	Print(headSum.next);
+	printf("\n");
+	printf("\n");
+
+	multiplicationOfTwoLists(head1.next, head2.next, &headMultiply);
+	Print(headMultiply.next);
+	printf("\n");
+
 
     return 0;
 }
@@ -80,14 +96,13 @@ int ReadFromFile(position ptr, FILE *fp) {
         int tempCoeff;
         int tempExp;
         int numBytes;
-        char* buf_ptr = buffer;
+        int buf_num=0;
 
-        if (sscanf(buffer, "%d %d%n ", &tempCoeff, &tempExp, &numBytes) == 2) {
+        while (sscanf(buffer+buf_num, "%d %d%n ", &tempCoeff, &tempExp,&numBytes) == 2) {
             sortInput(ptr, createElement(tempCoeff, tempExp));
-            buf_ptr += numBytes;
-        } else {
-            printf("Krivi format podataka u datoteci");
-        }
+			buf_num += numBytes;
+        } 
+
     }
     fclose(fp);
 
@@ -131,76 +146,80 @@ int DeleteAfter(position ptr) {
 	return 0;
 }
  
-int Print(position head) {
-	position temp = head->next;
-	while (temp != NULL) {
-		printf("%d %d ", temp->coeff, temp->exp);
-		temp = temp->next;
+int Print(position ptr) {
+	while (ptr != NULL) {
+		printf("%d %d ", ptr->coeff, ptr->exp);
+		ptr = ptr->next;
 	}
 	return 0;
 }
 
 int sumOfTwoLists(position ptr1, position ptr2, position headSum) {
-    int maxLen = 0;
-    if (lenghtOfList(ptr1) > lenghtOfList(ptr2)) {
-        maxLen = lenghtOfList(ptr1);
-    }
-    else {
-        maxLen = lenghtOfList(ptr2);
-    }
-
-    while (maxLen > 0) {
+    while (ptr1!=NULL && ptr2!=NULL) {
             if (ptr1->exp == ptr2->exp) {
                 int sum= ptr1->coeff + ptr2->coeff;
-				if (sum == 0) {
+				if (sum != 0) {
+                    sortInput(headSum, createElement(sum, ptr1->exp));
 					ptr1 = ptr1->next;
 					ptr2 = ptr2->next;
-					maxLen--;
                     break;
                 }
-				headSum->coeff = sum;
-                sortInput(headSum, createElement(headSum->coeff, headSum->exp));
-                ptr1 = ptr1->next;
-                ptr2 = ptr2->next;
-                maxLen--;
             }
             else if (ptr1->exp > ptr2->exp) {
 				sortInput(headSum, createElement(ptr2->coeff, ptr2->exp));
 				ptr2 = ptr2->next;
-				maxLen--;
 			}
             else if (ptr1->exp < ptr2->exp) {
 				sortInput(headSum, createElement(ptr1->coeff, ptr1->exp));
 				ptr1 = ptr1->next;
-				maxLen--;
             }
+    }
+
+	while (ptr1 != NULL) {
+		sortInput(headSum, createElement(ptr1->coeff, ptr1->exp));
+		ptr1 = ptr1->next;
+	}
+    while (ptr2!=NULL)
+    {
+        sortInput(headSum, createElement(ptr2->coeff, ptr2->exp));
+		ptr2 = ptr2->next;
     }
 	return 0;
 }
 
 int multiplicationOfTwoLists(position ptr1, position ptr2, position headMultiply) {
-	int maxLen = 0;
-	if (lenghtOfList(ptr1) > lenghtOfList(ptr2)) {
+    
+    int maxLen = 0;
+    if (lenghtOfList(ptr1) >= lenghtOfList(ptr2)) {
 		maxLen = lenghtOfList(ptr1);
-	}
-	else {
+    }
+    else {
 		maxLen = lenghtOfList(ptr2);
-	}
-
-    while (maxLen > 0) {
+    }
+    
+    while (maxLen != 0) {
         if (ptr1 == NULL) {
             sortInput(headMultiply, createElement(ptr2->coeff, ptr2->exp));
+			ptr2 = ptr2->next;
+            maxLen--;
         }
         else if (ptr2 == NULL) {
             sortInput(headMultiply, createElement(ptr1->coeff, ptr1->exp));
+			ptr1 = ptr1->next;
+            maxLen--;
         }
         else {
-			headMultiply->coeff = ptr1->coeff * ptr2->coeff;
-			headMultiply->exp = ptr1->exp + ptr2->exp;
-			sortInput(headMultiply, createElement(headMultiply->coeff, headMultiply->exp));
+            headMultiply->coeff = ptr1->coeff * ptr2->coeff;
+            headMultiply->exp = ptr1->exp + ptr2->exp;
+            sortInput(headMultiply, createElement(headMultiply->coeff, headMultiply->exp));
+			ptr1 = ptr1->next;
+			ptr2 = ptr2->next;
+            maxLen--;
         }
-		maxLen--;
+
     }
+       
+    
 	return 0;
 }
 
