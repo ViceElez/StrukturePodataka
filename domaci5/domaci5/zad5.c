@@ -54,10 +54,8 @@ Position FindPrevious(Position curr, Position head) {
 	Position temp = head;
 	while (temp->next != NULL && temp->next != curr) {
 		temp = temp->next;
-		return temp;
 	}
-
-	return NULL;
+	return  temp;;
 }
 
 int DeleteNode(Position ptr, Position head) {

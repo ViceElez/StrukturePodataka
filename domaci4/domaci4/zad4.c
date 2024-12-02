@@ -1,233 +1,162 @@
-#define _CRT_SECURE_NO_WARNINGS
-
-#include <ctype.h>
-#include<stdlib.h>
 #include<stdio.h>
+#include<stdlib.h>
 #include<string.h>
 
-struct _struct;
-typedef struct _struct* position;
-typedef struct _struct {
-    int coeff;
+#define MAX_LINE 1024
+
+struct _element;
+typedef struct _element* Pointer;
+typedef struct _element {
+    int koef;
     int exp;
-    position next;
-} Polinom;
+    Pointer next;
+}element;
 
-position createElement(int, int);
-int sortInput(position, position);
-int sumOfTwoLists(position, position, position);
-int multiplicationOfTwoLists(position, position, position);
-int ReadFromFile(position, FILE*);
-int inserAfter(position,position);
-int DeleteAfter(position);
-int Print(position);
-int lengthOfList(position);
+void readFromFile(Pointer);
+void readFromFile2(Pointer);
+Pointer create(int, int);
+void sort(Pointer, Pointer);
+void insertAfter(Pointer, Pointer);
+void print(Pointer);
+Pointer addPolinom(Pointer, Pointer, Pointer);
+Pointer multipyPolinom(Pointer, Pointer, Pointer);
 
-int main(void) {
-    Polinom head1 = {
-        .coeff = 0
-        , .exp = 0
-    };
 
-    Polinom head2 = {
-        .coeff = 0
-        , .exp = 0
-    };
+int main() {
 
-    Polinom headSum = {
-        .coeff = 0
-        , .exp = 0
-    };
+    element head, head2, headAdd, headTimes;
+    head.next = NULL;
+    head2.next = NULL;
+    headAdd.next = NULL;
+    headTimes.next = NULL;
 
-    Polinom headMultiply = {
-        .coeff = 0
-        , .exp = 0
-    };
+    readFromFile(&head);
+    readFromFile2(&head2);
+    print(head.next);
+    print(head2.next);
 
-	FILE* fp1 =fopen("C:\\Users\\leona\\Desktop\\Vice\\StrukturePodataka\\domaci4\\polinom1.txt", "r");
-	FILE* fp2 = fopen("C:\\Users\\leona\\Desktop\\Vice\\StrukturePodataka\\domaci4\\polinom2.txt", "r");
+    addPolinom(&head, &head2, &headAdd);
+    print(headAdd.next);
 
-	ReadFromFile(&head1, fp1);
-	ReadFromFile(&head2, fp2);
+    multipyPolinom(&head, &head2, &headTimes);
+    print(headTimes.next);
 
-	Print(head1.next);
-	printf("\n");
-
-	Print(head2.next);
-	printf("\n");
-	printf("\n");
-
-	sumOfTwoLists(head1.next, head2.next, &headSum);
-	Print(headSum.next);
-	printf("\n");
-	printf("\n");
-
-	multiplicationOfTwoLists(head1.next, head2.next, &headMultiply);
-	Print(headMultiply.next);
-	printf("\n");
 
 
     return 0;
 }
 
-position createElement(int tempCoeff, int tempExp) {
-    position nE = NULL;
-    nE = (position)malloc(sizeof(Polinom));
-    if (nE == NULL) {
-        printf("Greska pri stvaranju novog elementa");
-        return NULL;
-    }
-    nE->coeff = tempCoeff;
-    nE->exp = tempExp;
-    nE->next = NULL;
+void readFromFile(Pointer P) {
+    FILE* f;
+    f = fopen("FileZa4Zad.txt", "r");
+    Pointer newEl;
+    int e = 0, c = 0;
 
-    return nE;
-
-}
-
-int ReadFromFile(position ptr, FILE *fp) {
-    if (fp == NULL) {
+    if (!f) {
         printf("Greska pri otvaranju datoteke");
-        return 1;
     }
 
-    char buffer[200];
-    while (fgets(buffer, sizeof(buffer), fp)) {
-        int tempCoeff;
-        int tempExp;
-        int numBytes;
-        int buf_num=0;
-
-        while (sscanf(buffer+buf_num, "%d %d%n ", &tempCoeff, &tempExp,&numBytes) == 2) {
-            sortInput(ptr, createElement(tempCoeff, tempExp));
-			buf_num += numBytes;
-        } 
-
+    while (feof(f) == 0)
+    {
+        if (fscanf(f, " %d %d", &c, &e) == 2) {
+            newEl = create(c, e);
+            sort(P, newEl);
+        }
     }
-    fclose(fp);
+    fclose(f);
 
-    return 0;
+
 }
 
-int sortInput(position head, position nE) {
-    position temp = head;
-    while (temp->next != NULL && temp->next->exp < nE->exp) {
+Pointer create(int c, int e) {
+    Pointer newEl;
+    newEl = (Pointer)malloc(sizeof(element));
+
+    if (!newEl) {
+        printf("Neuspjela alokacija memorije");
+    }
+
+    newEl->exp = e;
+    newEl->koef = c;
+    newEl->next = NULL;
+
+    return newEl;
+}
+
+void sort(Pointer P, Pointer newEl) {
+    Pointer temp = P;
+
+    while (temp->next != NULL && newEl->exp > temp->next->exp)
+    {
         temp = temp->next;
     }
 
-    if (temp->next != NULL && temp->next->exp > nE->exp) {
-        inserAfter(temp, nE);
-    }
-    else if (temp->next != NULL && temp->next->exp == nE->exp) {
-        int sum = 0;
-        sum = temp->next->coeff + nE->coeff;
-        if (sum == 0) {
-            DeleteAfter(temp);
-        }
-        free(nE);
+    if (temp->next != NULL && temp->next->exp == newEl->exp) {
+        temp->next->koef += newEl->koef;
+        free(newEl);
     }
     else {
-        inserAfter(temp, nE);
-    }
-}
-
-int inserAfter(position prev, position nE) {
-	nE->next = prev->next;
-	prev->next = nE;
-
-	return 0;
-}
-
-int DeleteAfter(position ptr) {
-	position temp = ptr->next;
-    ptr->next = ptr->next->next;
-	free(temp);
-
-	return 0;
-}
- 
-int Print(position ptr) {
-	while (ptr != NULL) {
-		printf("%d %d ", ptr->coeff, ptr->exp);
-		ptr = ptr->next;
-	}
-	return 0;
-}
-
-int sumOfTwoLists(position ptr1, position ptr2, position headSum) {
-    while (ptr1!=NULL && ptr2!=NULL) {
-            if (ptr1->exp == ptr2->exp) {
-                int sum= ptr1->coeff + ptr2->coeff;
-				if (sum != 0) {
-                    sortInput(headSum, createElement(sum, ptr1->exp));
-					ptr1 = ptr1->next;
-					ptr2 = ptr2->next;
-                    break;
-                }
-            }
-            else if (ptr1->exp > ptr2->exp) {
-				sortInput(headSum, createElement(ptr2->coeff, ptr2->exp));
-				ptr2 = ptr2->next;
-			}
-            else if (ptr1->exp < ptr2->exp) {
-				sortInput(headSum, createElement(ptr1->coeff, ptr1->exp));
-				ptr1 = ptr1->next;
-            }
+        insertAfter(temp, newEl);
     }
 
-	while (ptr1 != NULL) {
-		sortInput(headSum, createElement(ptr1->coeff, ptr1->exp));
-		ptr1 = ptr1->next;
-	}
-    while (ptr2!=NULL)
+}
+
+void print(Pointer P) {
+    while (P != NULL) {
+        printf("(%d * X^%d )+", P->koef, P->exp);
+        P = P->next;
+    }
+    puts("\n");
+}
+
+void insertAfter(Pointer P, Pointer new) {
+    new->next = P->next;
+    P->next = new;
+}
+
+void readFromFile2(Pointer P) {
+    FILE* f;
+    f = fopen("FileZa4Zad2polinom", "r");
+    Pointer newEl;
+    int e = 0, c = 0;
+
+    if (!f) {
+        printf("Greska pri otvaranju datoteke");
+    }
+
+    while (feof(f) == 0)
     {
-        sortInput(headSum, createElement(ptr2->coeff, ptr2->exp));
-		ptr2 = ptr2->next;
+        if (fscanf(f, " %d %d", &c, &e) == 2) {
+            newEl = create(c, e);
+            sort(P, newEl);
+        }
     }
-	return 0;
+    fclose(f);
 }
 
-int multiplicationOfTwoLists(position ptr1, position ptr2, position headMultiply) {
-    
-    int maxLen = 0;
-    if (lenghtOfList(ptr1) >= lenghtOfList(ptr2)) {
-		maxLen = lenghtOfList(ptr1);
+Pointer addPolinom(Pointer p1, Pointer p2, Pointer p) {
+    Pointer temp1 = p1, temp2 = p2;
+    while (temp1->next != NULL) {
+        Pointer newEl = create(temp1->next->koef, temp1->next->exp);
+        sort(p, newEl);
+        temp1 = temp1->next;
     }
-    else {
-		maxLen = lenghtOfList(ptr2);
-    }
-    
-    while (maxLen != 0) {
-        if (ptr1 == NULL) {
-            sortInput(headMultiply, createElement(ptr2->coeff, ptr2->exp));
-			ptr2 = ptr2->next;
-            maxLen--;
-        }
-        else if (ptr2 == NULL) {
-            sortInput(headMultiply, createElement(ptr1->coeff, ptr1->exp));
-			ptr1 = ptr1->next;
-            maxLen--;
-        }
-        else {
-            headMultiply->coeff = ptr1->coeff * ptr2->coeff;
-            headMultiply->exp = ptr1->exp + ptr2->exp;
-            sortInput(headMultiply, createElement(headMultiply->coeff, headMultiply->exp));
-			ptr1 = ptr1->next;
-			ptr2 = ptr2->next;
-            maxLen--;
-        }
 
+    while (temp2->next != NULL) {
+        Pointer newEl = create(temp2->next->koef, temp2->next->exp);
+        sort(p, newEl);
+        temp2 = temp2->next;
     }
-       
-    
-	return 0;
+    return p;
 }
 
-int lenghtOfList(position ptr) {
-	int len = 0;
-	while (ptr != NULL) {
-		len++;
-		ptr = ptr->next;
-	}
-	return len;
+Pointer multipyPolinom(Pointer p1, Pointer p2, Pointer p) {
+    Pointer temp1 = p1, temp2 = p2;
+    for (temp1 = p1; temp1->next != NULL; temp1 = temp1->next) {
+        for (temp2 = p2; temp2->next != NULL; temp2 = temp2->next) {
+            Pointer newEl = create(temp1->next->koef * temp2->next->koef, temp1->next->exp + temp2->next->exp);
+            sort(p, newEl);
+        }
+    }
+    return p;
 }
