@@ -17,9 +17,10 @@ Position CreateNode(int);
 int DeleteNode(Position, Position);
 Position FindPrevious(Position, Position);
 int InsertAfter(Position, Position);
-int ReadFromFile(Position, FILE*);
+int ReadFromFile(Position);
 void StackOperation(char, Position);
 Position FindLast(Position);
+int Pop(Position head);
 
 
 
@@ -30,10 +31,14 @@ int main(void) {
 		.element = 0
 		,.next = NULL
 	};
+	int num;
 
-	FILE* fp = fopen("C:\\Users\\leona\\Desktop\\Vice\\StrukturePodataka\\domaci5\\postifx.txt", "r");
 
-	ReadFromFile(&head, fp);
+	num = ReadFromFile(&head);
+
+	printf("rezultat je %d", num);
+
+
 }
 
 Position CreateNode(int newElement) {
@@ -54,14 +59,16 @@ Position FindPrevious(Position curr, Position head) {
 	Position temp = head;
 	while (temp->next != NULL && temp->next != curr) {
 		temp = temp->next;
+		return temp;
 	}
-	return  temp;;
+
+	return NULL;
 }
 
 int DeleteNode(Position ptr, Position head) {
-	if (ptr==NULL || head==NULL) return -1;
+	if (ptr == NULL || head == NULL) return -1;
 	Position prev = FindPrevious(ptr, head);
-	if (prev==NULL) return -1;
+	if (prev == NULL) return -1;
 
 	prev->next = ptr->next;
 	free(ptr);
@@ -82,46 +89,78 @@ Position FindLast(Position head) {
 	return last;
 }
 
-int ReadFromFile(Position head, FILE* fp) {
+int ReadFromFile(Position head) {
+	FILE* f;
+	f = fopen("C:/Users/jopab/OneDrive/Dokumenti/SP.24-25/pp/list.txt", "r");
 	Position newNode = NULL;
 	int number = 0;
-	char ch;
-	bool isNumber = false; 
+	char ch[10];
+	int i, num1, num2;
 
-	if (fp == NULL) {
-		printf("Greska pri otvaranju datoteke.\n");
-		return 1;
+
+	if (f == NULL) {
+		puts("Greska pri otvaranju dat");
+		return 0;
 	}
 
-	while ((ch = fgetc(fp)) != EOF) {
-		if (isdigit(ch)) {			
-			number = number * 10 + (ch - '0');
-			isNumber = true;
-		}
-		else {
-			if (isNumber) {
-				
-				newNode = CreateNode(number);
-				InsertAfter(head, newNode);
-				number = 0;
-				isNumber = false;
+
+	while (feof(f) == 0) {
+		number = 0;
+		ch[0] = '\0';
+		fscanf(f, "%s", ch);
+
+		if (isdigit(ch[0]) != 0) {
+			for (i = 0; ch[i] != '\0'; i++) {
+				number = number * 10 + (ch[i] - '0');
 			}
-
-			
-			if (ch == '*' || ch == '+' || ch == '-' || ch == '/') {
-				StackOperation(ch, head);
-			}
+			newNode = CreateNode(number);
+			InsertAfter(head, newNode);
+			continue;
 		}
+
+		switch (ch[0])
+		{
+		case '+':
+			num1 = Pop(head);
+			num2 = Pop(head);
+			newNode = CreateNode(num1 + num2);
+			InsertAfter(head, newNode);
+			break;
+
+		case '-':
+			num1 = Pop(head);
+			num2 = Pop(head);
+			newNode = CreateNode(num2 - num1);
+			InsertAfter(head, newNode);
+			break;
+
+		case '*':
+			num1 = Pop(head);
+			num2 = Pop(head);
+			newNode = CreateNode(num1 * num2);
+			InsertAfter(head, newNode);
+			break;
+
+		case '/':
+			num1 = Pop(head);
+			num2 = Pop(head);
+			newNode = CreateNode(num2 / num1);
+			InsertAfter(head, newNode);
+			break;
+
+		default:
+			break;
+
+
+
+		}
+
+
 	}
-
-	if (isNumber) {
-		newNode = CreateNode(number);
-		InsertAfter(head, newNode);
-	}
+	num1 = Pop(head);
+	return num1;
 
 
-	printf("Izraz je: %d\n", (head->next)->element);
-	return 0;
 }
 
 
@@ -155,4 +194,14 @@ void StackOperation(char operation, Position head) {
 
 	Position newElem = CreateNode(result);
 	InsertAfter(head, newElem);
+}
+
+int Pop(Position head) {
+	Position temp = head->next;
+	int num = 0;
+	num = temp->element;
+	head->next = temp->next;
+	free(temp);
+	return num;
+
 }
