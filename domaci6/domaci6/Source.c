@@ -69,36 +69,36 @@ void ReadReceiptFromFile(receiptPos headRec) {
 		return ;
 	}
 	char fileName[100];
-	char receiptDate[11];
-	
-	while (fscanf(fp, "%s", fileName) == 1) {
-		FILE* fp1 = fopen(fileName, "r");
-		if (fp1 == NULL) {
-			printf("Greska pri otvaranju datoteke 2.");
-			return;
-		}
-		fgets(receiptDate, 11, fp1);
-		receiptDate[strcspn(receiptDate, "\n")] = '\0';
-		receiptPos newReceipt = CreateReceipt(receiptDate);
-		ReadArticleFromFile(&newReceipt->article, fp1);
-		SortReceiptByDate(headRec, newReceipt);
-		}
+	//char receiptDate[11];
+	//
+	//while (fscanf(fp, "%s", fileName) == 1) {
+	//	FILE* fp1 = fopen(fileName, "r");
+	//	if (fp1 == NULL) {
+	//		printf("Greska pri otvaranju datoteke 2.");
+	//		return;
+	//	}
+	//	fgets(receiptDate, 11, fp1);
+	//	receiptDate[strcspn(receiptDate, "\n")] = '\0';
+	//	receiptPos newReceipt = CreateReceipt(receiptDate);
+	//	ReadArticleFromFile(&newReceipt->article, fp1);
+	//	SortReceiptByDate(headRec, newReceipt);
+	//	}
 
 
-	/*while (!feof(fp)) {
+	while (!feof(fp)) {
 		if (fgets(fileName, sizeof(fileName), fp) != NULL) {
 			FILE* fp1 = fopen(fileName, "r");
 			if (fp1 == NULL) {
 				printf("Greska pri otvaranju datoteke 2.");
 				return;
 			}
-			fgets(receiptDate, 11, fp1);
+			/*fgets(receiptDate, 11, fp1);
 			receiptDate[strcspn(receiptDate, "\n")] = '\0';
 			receiptPos newReceipt = CreateReceipt(receiptDate);
 			ReadArticleFromFile(&newReceipt->article, fp1);
-			SortReceiptByDate(headRec, newReceipt);	
+			SortReceiptByDate(headRec, newReceipt);	*/
 		}
-	}*/
+	}
 	fclose(fp);
 	PrintReceipt(headRec);
 
