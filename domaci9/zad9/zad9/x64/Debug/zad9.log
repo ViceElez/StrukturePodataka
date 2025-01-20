@@ -1,0 +1,4 @@
+﻿  zadatak9.c
+C:\Users\leona\Desktop\Vice\StrukturePodataka\domaci9\zad9\zad9\zadatak9.c(41,2): warning C4013: 'replace' undefined; assuming extern returning int
+C:\Users\leona\Desktop\Vice\StrukturePodataka\domaci9\zad9\zad9\zadatak9.c(48,8): warning C4244: 'function': conversion from 'time_t' to 'unsigned int', possible loss of data
+  zad9.vcxproj -> C:\Users\leona\Desktop\Vice\StrukturePodataka\domaci9\zad9\x64\Debug\zad9.exe

@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\leona\\Desktop\\Vice\\StrukturePodataka\\domaci9\\zad9\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{55CF1316-F45C-48C5-932E-1373D5945AD2}|zad9\\zad9.vcxproj|C:\\Users\\leona\\Desktop\\Vice\\StrukturePodataka\\domaci9\\zad9\\zad9\\zadatak9.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{55CF1316-F45C-48C5-932E-1373D5945AD2}|zad9\\zad9.vcxproj|solutionrelative:zad9\\zadatak9.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "zadatak9.c",
+              "DocumentMoniker": "C:\\Users\\leona\\Desktop\\Vice\\StrukturePodataka\\domaci9\\zad9\\zad9\\zadatak9.c",
+              "RelativeDocumentMoniker": "zad9\\zadatak9.c",
+              "ToolTip": "C:\\Users\\leona\\Desktop\\Vice\\StrukturePodataka\\domaci9\\zad9\\zad9\\zadatak9.c",
+              "RelativeToolTip": "zad9\\zadatak9.c",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2025-01-20T13:33:21.762Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

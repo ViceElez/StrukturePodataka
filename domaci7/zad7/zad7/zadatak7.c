@@ -118,7 +118,7 @@ void GoToParent(dirPos* current) {
 }
 
 void ListDirectoryContents(dirPos current) {
-    if (!current->childDir) {
+    if (current->childDir==NULL) {
         printf("Nema direktorija\n");
         return;
     }
